@@ -1,26 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Modal, TouchableOpacity} from 'react-native';
-import ListItem from './components/List-item';
+import ListItem from './components/ListItem';
 import AddFrom from './components/AddForm';
 import {MaterialIcons} from '@expo/vector-icons';
 
 export default function App() {
   const [modal, setModal] = useState(false)
-  const [id, setId] = useState(6);
+  const [id, setId] = useState(2);
 
   const [tasks, setTasks] = useState([
     {text: 'to do smth', key: 1, done: false},
-    {text: 'to do smth', key: 2, done: false},
-    {text: 'to do smth', key: 3, done: false},
-    {text: 'to do smth', key: 4, done: false},
-    {text: 'to do smth', key: 5, done: false}
   ])
 
   const onDone =(key)=>{
     const idx = tasks.findIndex(el=>el.key===key);
     const itemUpd = {...tasks[idx], done: true};
-    tasksUpd = [...tasks.slice(0,idx), itemUpd, ...tasks.slice(idx+1)];
+    const tasksUpd = [...tasks.slice(0,idx), itemUpd, ...tasks.slice(idx+1)];
     setTasks(tasksUpd);
   }
 
