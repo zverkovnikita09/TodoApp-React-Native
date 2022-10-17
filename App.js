@@ -1,21 +1,61 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View} from 'react-native';
-import { Input } from './components/Input';
-import { List } from './components/list-item';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, FlatList, Modal, TouchableOpacity} from 'react-native';
+import ListItem from './components/List-item';
+import AddFrom from './components/AddForm';
+import {MaterialIcons} from '@expo/vector-icons';
 
 export default function App() {
-  const [state, setState] = React.useState([
-    {task: 'to do smth', done: false, id: 1},
-    {task: 'to do smth', done: false, id: 2},
-    {task: 'to do smth', done: false, id: 3}
+  const [modal, setModal] = useState(false)
+  const [id, setId] = useState(6);
+
+  const [tasks, setTasks] = useState([
+    {text: 'to do smth', key: 1, done: false},
+    {text: 'to do smth', key: 2, done: false},
+    {text: 'to do smth', key: 3, done: false},
+    {text: 'to do smth', key: 4, done: false},
+    {text: 'to do smth', key: 5, done: false}
   ])
+
+  const onDone =(key)=>{
+    const idx = tasks.findIndex(el=>el.key===key);
+    const itemUpd = {...tasks[idx], done: true};
+    tasksUpd = [...tasks.slice(0,idx), itemUpd, ...tasks.slice(idx+1)];
+    setTasks(tasksUpd);
+  }
+
+  const AddTask = (text)=>{
+    const newTask = {
+      text: text,
+      key: id,
+      done: false
+    }
+    setId(prev=>++prev);
+    const tasksUpd = [...tasks, newTask];
+    setTasks(tasksUpd);
+  }
+  const CloseModal =()=>{
+    setModal(false);
+  }
 
   return (
     <View style={styles.container}>
+      <Modal visible={modal} animationType='fade' transparent={true}>
+          <AddFrom closeModal={CloseModal} AddTask={AddTask}/>
+      </Modal>
+
       <Text style={styles.title}>Todo app</Text>
-      <Input/>
-      <List items={state}/>
+
+      <TouchableOpacity style={{marginTop: 20}} onPress={()=>setModal(true)}>
+        <MaterialIcons name='add' size={50} style={{textAlign:"center"}}/>
+      </TouchableOpacity>
+
+      <View style={styles.listWrapper}>
+        <FlatList style={styles.list} data={tasks} renderItem={({item})=>(
+          <ListItem el={item} onDone={onDone}/>
+        )}/>
+      </View>
+
       <StatusBar style="auto" />
     </View>
   );
@@ -23,13 +63,20 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 60,
+    flex: 1,
+    marginTop: 10,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 15
   },
   title: {
+    marginTop: 20,
     fontSize: 40,
+  },
+  listWrapper: {
+    marginTop: 10,
+    width: '90%',
+    flex: 1
   },
 });
