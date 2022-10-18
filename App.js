@@ -14,7 +14,7 @@ export default function App() {
     {text: 'to do smth2', key: 2, done: false},
     {text: 'to do smth3', key: 3, done: false},
     {text: 'to do smth4', key: 4, done: false},
-    {text: 'to do smth5', key: 5, done: false},
+    {text: 'to do smth5 to do smth5 to do smth5 to do smth5to do smth5 to do smth5 to do smth5 to do smth5 to do smth5to do smth5', key: 5, done: false},
   ])
 
   const onDone =(key)=>{
@@ -43,6 +43,10 @@ export default function App() {
 
   const CloseModal =()=>{
     setModal(false);
+  }
+
+  const EditTask = (text,id)=>{
+    
   }
 
   return (

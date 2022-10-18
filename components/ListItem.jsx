@@ -1,9 +1,12 @@
 import React, { useRef, useState } from 'react';
-import { Animated, StyleSheet, Text, View, TouchableOpacity, Pressable} from 'react-native';
+import { Animated, StyleSheet, Text, View, TouchableOpacity, Pressable, Modal, TextInput} from 'react-native';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
+import EditTask from './EditTask';
 
 export default function ListItem({ el, onDone, deleteTask}) {
-    const { text, done, key } = el;
+    const {done, key } = el;
+    const [text, setText] = useState(el.text);
+    const [modal, setModal] = useState(false);
     const pressAnim = useRef(new Animated.Value(1)).current;
     const deleteAnimVal = useRef(new Animated.Value(0)).current;
     const [overlay, setOverlay] = useState(false);
@@ -41,9 +44,13 @@ export default function ListItem({ el, onDone, deleteTask}) {
     const onDeleteOpacity = deleteAnimVal.interpolate({inputRange: [0, 70], outputRange: [1, 0]})
     
     return (
+        <>
+        <Modal visible={modal} animationType='fade' transparent={true}>
+            <EditTask text={text} closeModal={()=>setModal(false)} newText={setText}/>
+        </Modal>
+
         <Pressable onPressIn={()=>pressAnimIn(pressAnim)} onPressOut={()=>pressAnimOut(pressAnim)} onPress={() => onDone(key)} disabled={overlay} onLongPress={longPress}>
             <Animated.View style={{ transform: [{ scale: pressAnim }] }}>
-                
                 <View style={[style.overlay,{display: overlay ? 'flex' : 'none'}]}>
                     <Pressable onPress={()=>onDeleteAnim(key)}>
                         <AntDesign
@@ -63,7 +70,7 @@ export default function ListItem({ el, onDone, deleteTask}) {
 
                     <View style={[{ marginLeft: done ? 0 : 10 }, style.inner]}>
                         <Text style={[style.task, { textDecorationLine: done ? 'line-through' : 'none' }]}>{text}</Text>
-                        <TouchableOpacity style={style.edit}>
+                        <TouchableOpacity style={style.edit} onPress={()=>setModal(true)}>
                             <MaterialIcons
                                 name='edit'
                                 size={20}
@@ -74,6 +81,7 @@ export default function ListItem({ el, onDone, deleteTask}) {
                 </Animated.View>
             </Animated.View>
         </Pressable>
+        </>
     )
 };
 
