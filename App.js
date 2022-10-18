@@ -45,10 +45,13 @@ export default function App() {
     setModal(false);
   }
 
-  const EditTask = (text,id)=>{
-    
+  const EditTask = (text,key)=>{
+    const idx = tasks.findIndex(el=>el.key === key);
+    const itemUpd = {...tasks[idx], text};
+    const tasksUpd = [...tasks.slice(0,idx), itemUpd, ...tasks.slice(idx+1)];
+    setTasks(tasksUpd);
   }
-
+  console.log(tasks)
   return (
     <View style={styles.container}>
         <Modal visible={modal} animationType='fade' transparent={true}>
@@ -63,7 +66,7 @@ export default function App() {
           <FlatList 
           style={styles.list} 
           data={tasks} 
-          renderItem={({item})=>(<ListItem el={item} onDone={onDone} deleteTask={DeleteTask}/>)}
+          renderItem={({item})=>(<ListItem el={item} onDone={onDone} deleteTask={DeleteTask} editTask={EditTask}/>)}
           ItemSeparatorComponent={() => <View style={{height: 10}}/>}
           />
         </View>

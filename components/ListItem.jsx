@@ -3,9 +3,8 @@ import { Animated, StyleSheet, Text, View, TouchableOpacity, Pressable, Modal, T
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import EditTask from './EditTask';
 
-export default function ListItem({ el, onDone, deleteTask}) {
-    const {done, key } = el;
-    const [text, setText] = useState(el.text);
+export default function ListItem({ el, onDone, deleteTask, editTask}) {
+    const {done, key, text } = el;
     const [modal, setModal] = useState(false);
     const pressAnim = useRef(new Animated.Value(1)).current;
     const deleteAnimVal = useRef(new Animated.Value(0)).current;
@@ -39,6 +38,9 @@ export default function ListItem({ el, onDone, deleteTask}) {
     const longPress =()=>{
         setOverlay(true);
     }
+    const newText = (text)=>{
+        editTask(text,key)
+    }
 
     const onDeleteTranslate = deleteAnimVal.interpolate({inputRange: [0, 100], outputRange: [0, -350]})
     const onDeleteOpacity = deleteAnimVal.interpolate({inputRange: [0, 70], outputRange: [1, 0]})
@@ -46,7 +48,7 @@ export default function ListItem({ el, onDone, deleteTask}) {
     return (
         <>
         <Modal visible={modal} animationType='fade' transparent={true}>
-            <EditTask text={text} closeModal={()=>setModal(false)} newText={setText}/>
+            <EditTask text={text} closeModal={()=>setModal(false)} newText={newText}/>
         </Modal>
 
         <Pressable onPressIn={()=>pressAnimIn(pressAnim)} onPressOut={()=>pressAnimOut(pressAnim)} onPress={() => onDone(key)} disabled={overlay} onLongPress={longPress}>
@@ -70,7 +72,7 @@ export default function ListItem({ el, onDone, deleteTask}) {
 
                     <View style={[{ marginLeft: done ? 0 : 10 }, style.inner]}>
                         <Text style={[style.task, { textDecorationLine: done ? 'line-through' : 'none' }]}>{text}</Text>
-                        <TouchableOpacity style={style.edit} onPress={()=>setModal(true)}>
+                        <TouchableOpacity style={style.edit} onPress={()=>setModal(true)} disabled={done}>
                             <MaterialIcons
                                 name='edit'
                                 size={20}
