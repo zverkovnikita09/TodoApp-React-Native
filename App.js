@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Modal, TouchableOpacity} from 'react-native';
 import ListItem from './components/ListItem';
 import AddFrom from './components/AddForm';
-import {MaterialIcons} from '@expo/vector-icons';
+import AddIcon from './components/AddIcon'
 
 export default function App() {
   const [modal, setModal] = useState(false)
@@ -42,9 +42,7 @@ export default function App() {
 
       <Text style={styles.title}>Todo app</Text>
 
-      <TouchableOpacity style={{marginTop: 20}} onPress={()=>setModal(true)}>
-        <MaterialIcons name='add' size={50} style={{textAlign:"center"}}/>
-      </TouchableOpacity>
+      <AddIcon openModal={()=>setModal(true)}/>
 
       <View style={styles.listWrapper}>
         <FlatList style={styles.list} data={tasks} renderItem={({item})=>(
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
     padding: 15
   },
   title: {
-    marginTop: 20,
+    marginTop: 40,
     fontSize: 40,
   },
   listWrapper: {

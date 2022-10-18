@@ -1,26 +1,46 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React, {useRef} from 'react';
+import {Animated, StyleSheet, Text, View, TouchableOpacity, Pressable} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
 
 export default function ListItem ({el,onDone}){
     const {text, done, key} = el;
+    const pressAnim = useRef(new Animated.Value(1)).current;
+
+    const pressAnimIn = () => {
+        Animated.timing(pressAnim, {
+          toValue: 0.9,
+          duration: 200,
+          useNativeDriver: true
+        }).start();
+      };
+    
+      const pressAnimOut = () => {
+        Animated.timing(pressAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true
+        }).start();
+      };
+
     return(
-        <TouchableOpacity style={style.itemContainer} onPress={()=>{onDone(key)}}>
-            <Text style={[style.task, {textDecorationLine: done ? 'line-through' : 'none'}]}>{text}</Text>
-            <View style={style.buttons}>
-                <TouchableOpacity style={style.edit}>
-                    <MaterialIcons
-                        name='edit'
-                        size={20}
-                        style={{textAlign:"center"}}
-                        />
-                </TouchableOpacity>
-                <TouchableOpacity style={[style.done, {borderColor: done ? 'transparent' : 'black'}]} onPress={()=>{onDone(key)}} disabled={!done}>
-                    {!done ? null :
-                    (<MaterialIcons name='done' size={30} style={{textAlign:"center",marginTop: -3, color: 'green'}}/>)}
-                </TouchableOpacity>
-            </View>
-        </TouchableOpacity>
+        <Pressable onPressIn={pressAnimIn} onPressOut={pressAnimOut} onPress={()=>onDone(key)} disabled={done}>
+            <Animated.View style={[{transform: [{scale: pressAnim}]},style.itemContainer]}>
+                <Text style={[style.task, {textDecorationLine: done ? 'line-through' : 'none'}]}>{text}</Text>
+                <View style={style.buttons}>
+                    <TouchableOpacity style={style.edit}>
+                        <MaterialIcons
+                            name='edit'
+                            size={20}
+                            style={{textAlign:"center"}}
+                            />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[style.done, {borderColor: done ? 'transparent' : 'black'}]} onPress={()=>{onDone(key)}}>
+                        {!done ? null :
+                        (<MaterialIcons name='done' size={30} style={{textAlign:"center",marginTop: -3, color: 'green'}}/>)}
+                    </TouchableOpacity>
+                </View>
+            </Animated.View>
+        </Pressable>
     )
 };
 
