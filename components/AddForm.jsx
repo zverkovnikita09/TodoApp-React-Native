@@ -20,7 +20,7 @@ export default function AddFrom ({closeModal,AddTask}){
                         <Text style={{fontSize: 22, textAlign: 'center'}}>Add new task</Text>
                         <TextInput onChangeText={setText} placeholder="type your task" style={style.input}/>
                         <TouchableOpacity onPress={onConfirm} style={style.addBtn}>
-                            <Text style={style.btnText}>Add Text</Text>
+                            <Text style={style.btnText}>Add Task</Text>
                         </TouchableOpacity>
                     </View>
                 </TouchableWithoutFeedback>

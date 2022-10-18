@@ -1,16 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Modal, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Modal} from 'react-native';
 import ListItem from './components/ListItem';
 import AddFrom from './components/AddForm';
 import AddIcon from './components/AddIcon'
 
 export default function App() {
-  const [modal, setModal] = useState(false)
-  const [id, setId] = useState(2);
+  const [modal, setModal] = useState(false);
+  const [id, setId] = useState(6);
 
   const [tasks, setTasks] = useState([
-    {text: 'to do smth', key: 1, done: false},
+    {text: 'to do smth1', key: 1, done: false},
+    {text: 'to do smth2', key: 2, done: false},
+    {text: 'to do smth3', key: 3, done: false},
+    {text: 'to do smth4', key: 4, done: false},
+    {text: 'to do smth5', key: 5, done: false},
   ])
 
   const onDone =(key)=>{
@@ -30,26 +34,35 @@ export default function App() {
     const tasksUpd = [...tasks, newTask];
     setTasks(tasksUpd);
   }
+
+  const DeleteTask = (key)=>{
+    const idx = tasks.findIndex(el=>el.key === key);
+    const tasksUpd = [...tasks.slice(0,idx), ...tasks.slice(idx+1)];
+    setTasks(tasksUpd);
+  }
+
   const CloseModal =()=>{
     setModal(false);
   }
 
   return (
     <View style={styles.container}>
-      <Modal visible={modal} animationType='fade' transparent={true}>
-          <AddFrom closeModal={CloseModal} AddTask={AddTask}/>
-      </Modal>
+        <Modal visible={modal} animationType='fade' transparent={true}>
+            <AddFrom closeModal={CloseModal} AddTask={AddTask}/>
+        </Modal>
 
-      <Text style={styles.title}>Todo app</Text>
+        <Text style={styles.title}>Todo app</Text>
 
-      <AddIcon openModal={()=>setModal(true)}/>
+        <AddIcon openModal={()=>setModal(true)}/>
 
-      <View style={styles.listWrapper}>
-        <FlatList style={styles.list} data={tasks} renderItem={({item})=>(
-          <ListItem el={item} onDone={onDone}/>
-        )}/>
-      </View>
-
+        <View style={styles.listWrapper}>
+          <FlatList 
+          style={styles.list} 
+          data={tasks} 
+          renderItem={({item})=>(<ListItem el={item} onDone={onDone} deleteTask={DeleteTask}/>)}
+          ItemSeparatorComponent={() => <View style={{height: 10}}/>}
+          />
+        </View>
       <StatusBar style="auto" />
     </View>
   );
