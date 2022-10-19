@@ -4,7 +4,7 @@ import { MaterialIcons, AntDesign, MaterialCommunityIcons  } from '@expo/vector-
 import EditTask from './EditTask';
 
 export default function ListItem({ el, onDone, deleteTask, editTask}) {
-    const offset = 108;
+    const offset = 79;
     const [cancel,setCancel] = useState(true)
     const {done, key, text } = el;
     const [modal, setModal] = useState(false);
@@ -32,7 +32,7 @@ export default function ListItem({ el, onDone, deleteTask, editTask}) {
         setCancel(false)
         Animated.timing(deleteAnimVal, {
             toValue: -350,
-            duration: 50,
+            duration: 70,
             useNativeDriver: true
         }).start(()=>deleteTask(key));
 
@@ -146,9 +146,9 @@ const style = StyleSheet.create({
         top: 0,
         right: 0,
         height: '100%',
-        width: 110,
+        width: 80,
         justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 255, 0.85)',
+        backgroundColor: 'rgba(52, 52, 52, 0.5)',
         borderTopStartRadius: 7,
         borderBottomStartRadius: 7,
         transform: [
