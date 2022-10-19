@@ -1,9 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { Animated, StyleSheet, Text, View, TouchableOpacity, Pressable, Modal, TextInput} from 'react-native';
-import { MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialIcons, AntDesign, MaterialCommunityIcons  } from '@expo/vector-icons';
 import EditTask from './EditTask';
 
 export default function ListItem({ el, onDone, deleteTask, editTask}) {
+    const offset = 108;
+    const [cancel,setCancel] = useState(true)
     const {done, key, text } = el;
     const [modal, setModal] = useState(false);
     const pressAnim = useRef(new Animated.Value(1)).current;
@@ -27,23 +29,35 @@ export default function ListItem({ el, onDone, deleteTask, editTask}) {
     };
 
     const onDeleteAnim = (key)=>{
-        setOverlay(false);
+        /* setOverlay(false); */
+        setCancel(false)
         Animated.timing(deleteAnimVal, {
-            toValue: 100,
-            duration: 350,
+            toValue: -350,
+            duration: 50,
             useNativeDriver: true
         }).start(()=>deleteTask(key));
 
     }
     const longPress =()=>{
-        setOverlay(true);
+        setOverlay(true)
+        Animated.timing(deleteAnimVal, {
+            toValue: -offset,
+            duration: 50,
+            useNativeDriver: true
+        }).start()
     }
+    const cancelAnim =()=>{
+        setOverlay(false)
+        Animated.timing(deleteAnimVal, {
+            toValue: 0,
+            duration: 50,
+            useNativeDriver: true
+        }).start()
+    }
+
     const newText = (text)=>{
         editTask(text,key)
     }
-
-    const onDeleteTranslate = deleteAnimVal.interpolate({inputRange: [0, 100], outputRange: [0, -350]})
-    const onDeleteOpacity = deleteAnimVal.interpolate({inputRange: [0, 70], outputRange: [1, 0]})
     
     return (
         <>
@@ -51,12 +65,23 @@ export default function ListItem({ el, onDone, deleteTask, editTask}) {
             <EditTask text={text} closeModal={()=>setModal(false)} newText={newText}/>
         </Modal>
 
-        <Pressable onPressIn={()=>pressAnimIn(pressAnim)} onPressOut={()=>pressAnimOut(pressAnim)} onPress={() => onDone(key)} disabled={overlay} onLongPress={longPress}>
+        <Pressable onPressIn={()=>pressAnimIn(pressAnim)} onPressOut={()=>pressAnimOut(pressAnim)} onPress={() => onDone(key)} disabled={overlay} onLongPress={longPress} delayLongPress={300}>
             <Animated.View style={{ transform: [{ scale: pressAnim }] }}>
-                <View style={[style.overlay,{display: overlay ? 'flex' : 'none'}]}>
+                <Animated.View style={[style.overlay,{display: overlay ? 'flex' : 'none', transform: [{translateX: deleteAnimVal}]}]}>
                     <Pressable onPress={()=>onDeleteAnim(key)}>
                         <AntDesign
                         name='delete'
+                        size={30}
+                        style={{ textAlign: "center", transform: [{translateX: offset/2}]}}
+                        color='white'
+                        />
+                    </Pressable>
+                </Animated.View>
+
+                <View style={[style.cancel, {display: cancel ? 'flex' : 'none'}]}>
+                    <Pressable onPress={cancelAnim}>
+                        <MaterialCommunityIcons
+                        name='cancel'
                         size={30}
                         style={{ textAlign: "center"}}
                         color='white'
@@ -64,7 +89,7 @@ export default function ListItem({ el, onDone, deleteTask, editTask}) {
                     </Pressable>
                 </View>
 
-                <Animated.View style={[style.itemContainer,{transform: [{translateX: onDeleteTranslate}], opacity: onDeleteOpacity}]}>
+                <Animated.View style={[style.itemContainer,{transform: [{translateX: deleteAnimVal}], opacity: 1}]}>
                     <View style={style.done}>
                         {!done ? null :
                             (<MaterialIcons name='done' size={30} style={{ textAlign: "center", marginTop: -3, color: 'green' }} />)}
@@ -89,6 +114,8 @@ export default function ListItem({ el, onDone, deleteTask, editTask}) {
 
 const style = StyleSheet.create({
     itemContainer: {
+        position: 'relative',
+        backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
@@ -97,6 +124,7 @@ const style = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         borderColor: 'black',
+        zIndex: 1
     },
     inner: {
         flexDirection: 'row',
@@ -112,8 +140,22 @@ const style = StyleSheet.create({
         left: 0,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 5,
         zIndex: 2
+    },
+    cancel: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        height: '100%',
+        width: 110,
+        justifyContent: 'center',
+        backgroundColor: 'blue',
+        borderTopStartRadius: 7,
+        borderBottomStartRadius: 7,
+        transform: [
+            {scaleX: -1}
+        ],
+        zIndex: -1
     },
     task: {
         fontSize: 18,

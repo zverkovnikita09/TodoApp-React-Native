@@ -51,7 +51,7 @@ export default function App() {
     const tasksUpd = [...tasks.slice(0,idx), itemUpd, ...tasks.slice(idx+1)];
     setTasks(tasksUpd);
   }
-  console.log(tasks)
+  
   return (
     <View style={styles.container}>
         <Modal visible={modal} animationType='fade' transparent={true}>
