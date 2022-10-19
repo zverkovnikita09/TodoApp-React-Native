@@ -64,7 +64,7 @@ const style = StyleSheet.create({
     accept: {
         flex: 1,
         marginTop: 20,
-        backgroundColor: 'green',
+        backgroundColor: 'rgba(12, 157, 87, 0.9)',
         borderRadius: 7,
         padding: 10,
         marginRight: 30,
@@ -73,7 +73,7 @@ const style = StyleSheet.create({
     cancel: {
         flex: 1,
         marginTop: 20,
-        backgroundColor: 'red',
+        backgroundColor: 'rgba(255, 0, 0, 0.8)',
         borderRadius: 7,
         padding: 10,
         alignItems: 'center'

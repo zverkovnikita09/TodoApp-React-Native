@@ -14,8 +14,8 @@ export default function ListItem({ el, onDone, deleteTask, editTask}) {
 
     const pressAnimIn = (arg) => {
         Animated.timing(arg, {
-            toValue: 0.9,
-            duration: 200,
+            toValue: 0.95,
+            duration: 150,
             useNativeDriver: true
         }).start();
     };
@@ -23,13 +23,12 @@ export default function ListItem({ el, onDone, deleteTask, editTask}) {
     const pressAnimOut = (arg) => {
         Animated.timing(arg, {
             toValue: 1,
-            duration: 150,
+            duration: 100,
             useNativeDriver: true
         }).start();
     };
 
     const onDeleteAnim = (key)=>{
-        /* setOverlay(false); */
         setCancel(false)
         Animated.timing(deleteAnimVal, {
             toValue: -350,
@@ -89,21 +88,23 @@ export default function ListItem({ el, onDone, deleteTask, editTask}) {
                     </Pressable>
                 </View>
 
-                <Animated.View style={[style.itemContainer,{transform: [{translateX: deleteAnimVal}], opacity: 1}]}>
-                    <View style={style.done}>
-                        {!done ? null :
-                            (<MaterialIcons name='done' size={30} style={{ textAlign: "center", marginTop: -3, color: 'green' }} />)}
-                    </View>
+                <Animated.View style={[style.itemContainer,{transform: [{translateX: deleteAnimVal}],
+                    borderWidth: done ? 2 : 1,
+                    borderColor: done ? 'green' : 'black'}]}>
 
-                    <View style={[{ marginLeft: done ? 0 : 10 }, style.inner]}>
+                    <View style={style.inner}>
                         <Text style={[style.task, { textDecorationLine: done ? 'line-through' : 'none' }]}>{text}</Text>
-                        <TouchableOpacity style={style.edit} onPress={()=>setModal(true)} disabled={done}>
+                        <TouchableOpacity style={[style.edit,{display: done? 'none' : 'flex'}]} onPress={()=>setModal(true)} disabled={done}>
                             <MaterialIcons
                                 name='edit'
                                 size={20}
-                                style={{ textAlign: "center" }}
+                                style={{ textAlign: "center" ,opacity: overlay? 0 : 1}}
                             />
                         </TouchableOpacity>
+                        <View style={style.done}>
+                        {(!done) ? null :
+                            (<MaterialIcons name='done' size={25} style={[style.doneBtn,{opacity: overlay? 0 : 1}]}/>)}
+                        </View>
                     </View>
                 </Animated.View>
             </Animated.View>
@@ -121,10 +122,8 @@ const style = StyleSheet.create({
         width: '100%',
         paddingVertical: 8,
         paddingHorizontal: 10,
-        borderWidth: 1,
+        zIndex: 1,
         borderRadius: 5,
-        borderColor: 'black',
-        zIndex: 1
     },
     inner: {
         flexDirection: 'row',
@@ -134,7 +133,7 @@ const style = StyleSheet.create({
     overlay:{
         height: '100%',
         width: '100%',
-        backgroundColor: 'rgba(255, 0, 0, 0.9)',
+        backgroundColor: 'rgba(255, 0, 0, 0.85)',
         position: 'absolute',
         top: 0,
         left: 0,
@@ -149,7 +148,7 @@ const style = StyleSheet.create({
         height: '100%',
         width: 110,
         justifyContent: 'center',
-        backgroundColor: 'blue',
+        backgroundColor: 'rgba(0, 0, 255, 0.85)',
         borderTopStartRadius: 7,
         borderBottomStartRadius: 7,
         transform: [
@@ -163,6 +162,15 @@ const style = StyleSheet.create({
     },
     done: {
         justifyContent: 'center',
+    },
+    doneBtn:{
+        textAlign: "center",
+        paddingTop: 1.5,
+        paddingRight: 1.5,
+        color: 'green', 
+        borderWidth: 2,
+        borderColor: 'green',
+        borderRadius: 50
     },
     edit: {
         width: 30,

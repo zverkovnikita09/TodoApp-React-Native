@@ -20,7 +20,7 @@ export default function AddFrom ({closeModal,AddTask}){
                         <Text style={{fontSize: 22, textAlign: 'center'}}>Add new task</Text>
                         <TextInput onChangeText={setText} placeholder="type your task" style={style.input} autoFocus={true} multiline={true}/>
                         <TouchableOpacity onPress={onConfirm} style={style.addBtn}>
-                            <Text style={style.btnText}>Add Task</Text>
+                            <Text style={style.btnText}>Add</Text>
                         </TouchableOpacity>
                     </View>
                 </TouchableWithoutFeedback>
@@ -53,7 +53,7 @@ const style = StyleSheet.create({
     addBtn: {
         width: '100%',
         marginTop: 20,
-        backgroundColor: 'blue',
+        backgroundColor: 'rgba(36, 187, 221, 0.85)',
         borderRadius: 7,
         padding: 10
     },
