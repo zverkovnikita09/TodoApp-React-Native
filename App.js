@@ -15,10 +15,9 @@ export default function App() {
     {text: 'to do smth1', key: 1, done: false},
     {text: 'to do smth2', key: 2, done: false},
     {text: 'to do smth3', key: 3, done: false},
-    {text: 'to do smth4', key: 4, done: false},
+    {text: 'to do smth4', key: 4, done: false}
   ])
   
-
   const onDone =(key)=>{
     const idx = tasks.findIndex(el=>el.key===key);
     const itemUpd = {...tasks[idx], done: true};

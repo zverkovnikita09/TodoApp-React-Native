@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Animated, StyleSheet, Text, View, TouchableOpacity, Pressable, Modal, TextInput} from 'react-native';
+import { Animated, StyleSheet, Text, View, TouchableOpacity, Pressable, Modal} from 'react-native';
 import { MaterialIcons, AntDesign, MaterialCommunityIcons  } from '@expo/vector-icons';
 import EditTask from './EditTask';
 
